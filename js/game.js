@@ -36,6 +36,7 @@ var hero = {
 };
 // monster wont move but lets try and change this later
 var monster = {
+  speed: 256, // gota make these monsters move somehow... hmmmmm
   x: 0,
   y: 0
 };
@@ -65,11 +66,31 @@ var resetPlayer = function () {
   hero.y = canvas.height / 2;
 };
 
+// trying to smooth movement.... failing.... super hard fail
 
-// now we have to update the games objects
+// function badMove(modifier) {
+
+//   randomchance = Math.random() 
+
+//   if (randomchance < 0.25) {
+//     monster.x += monster.speed * modifier;
+//   }
+//   if (randomchance < 0.50) {
+//     monster.x -= monster.speed * modifier;
+//   }
+//   if (randomchance < 0.75) {
+//     monster.y += monster.speed * modifier;
+//   }
+//   if (randomchance < 1) {
+//     monster.y -= monster.speed * modifier; //still got a huge problem with this, monster movement erratic
+//   }
+
+// }
+
+// now we have to update the games objects!! this is going to be big!!
 var update = function (modifier) {
   if (38 in keysDown) {
-    hero.y -= hero.speed * modifier // what this is doing is essentially moving your dude 256 pixels in the y direction
+    hero.y -= hero.speed * modifier; // what this is doing is essentially moving your dude 256 pixels in the y direction
   }
   if (40 in keysDown) { // Player holding down
     hero.y += hero.speed * modifier;
@@ -79,6 +100,24 @@ var update = function (modifier) {
   }
   if (39 in keysDown) { // Player holding right
     hero.x += hero.speed * modifier;
+  }
+
+  // monster movement... make random maybe? how the fuck to make this smooth
+
+  randMove = Math.random() 
+
+  if (randMove <= 0.25) {
+    monster.x += monster.speed * modifier;
+  }
+  if (randMove <= 0.50) {
+    monster.x -= monster.speed * modifier;
+  }
+  if (randMove <= 0.75) {
+     monster.y += monster.speed * modifier;
+  }
+  if (randMove <= 1) {
+    monster.y -= monster.speed * modifier; 
+  // still got a huge problem with this, monster movement erratic
   }
 
     // here we are setting collision, so if we touch the monster they will get caught
@@ -101,7 +140,20 @@ var update = function (modifier) {
   ) {
     resetPlayer();
   }
-}; // the movment modifier works like this 1 seond = 256 * 1, 0.5 seconds = 256 * 0.5 ect
+
+  // do the same with the monster 
+  if (
+    monster.x >= (canvas.width) 
+    || monster.x <= -30
+    || monster.y >= (canvas.height) 
+    || monster.y <= -30 
+  ) {
+    --monstersCaught
+    reset();
+  }
+
+}; 
+// the movment modifier works like this 1 seond = 256 * 1, 0.5 seconds = 256 * 0.5 ect
 // this ensures that the hero runs at the same speed all the time
 
 // lets get drawing! or whatever it is in javascript
@@ -130,12 +182,13 @@ var render = function () {
 var main = function () {
   var now = Date.now();
   var delta = now - then;
+  // badMove(delta / 1000);
 
   update(delta / 1000);
   render();
 
   then = now;
-  // now important we have to do this AGAIN ASAP!!!!
+  // now important we have to do this AGAIN ASAP!!!! apperantly animation frame is the way to go
   requestAnimationFrame(main);
 };
 
@@ -147,6 +200,7 @@ requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame
 var then = Date.now();
 reset();
 main();
+
 
 
 
