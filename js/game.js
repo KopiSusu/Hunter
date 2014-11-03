@@ -18,7 +18,7 @@ var heroImage = new Image();
 heroImage.onload = function () {
   heroReady = true;
 };
-heroImage.src = "images/Hero.png";
+heroImage.src = "images/hero.png";
 
 // some bad motherfuckers image
 var monsterReady = false;
