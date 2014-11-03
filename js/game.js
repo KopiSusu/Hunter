@@ -36,9 +36,10 @@ var hero = {
 };
 // monster wont move but lets try and change this later
 var monster = {
-  speed: 256, // gota make these monsters move somehow... hmmmmm
+  speed: 100, // gota make these monsters move somehow... hmmmmm
   x: 0,
-  y: 0
+  y: 0,
+  direction: "right"
 };
 var monstersCaught = 0;
 
@@ -58,34 +59,24 @@ addEventListener("keyup", function (e) {
 var reset = function () {
   monster.x = 32 + (Math.random() * (canvas.width - 64));
   monster.y = 32 + (Math.random() * (canvas.height - 64))
+  // sets the monsters direction after reset
+  randValue = Math.random()
+  if (randValue < 0.25){
+    monster.direction = "right";
+  } else if (randValue >= 0.25 && randValue < 0.5) {
+    monster.direction = "left";
+  } else if (randValue >= 0.50 && randValue < 0.75) {
+    monster.direction = "down";
+  } else if (randValue >= 0.75) {
+    monster.direction = "up";
+  }
 };
 
 // reset player position
 var resetPlayer = function () {
   hero.x = canvas.width / 2;
   hero.y = canvas.height / 2;
-};
-
-// trying to smooth movement.... failing.... super hard fail
-
-// function badMove(modifier) {
-
-//   randomchance = Math.random() 
-
-//   if (randomchance < 0.25) {
-//     monster.x += monster.speed * modifier;
-//   }
-//   if (randomchance < 0.50) {
-//     monster.x -= monster.speed * modifier;
-//   }
-//   if (randomchance < 0.75) {
-//     monster.y += monster.speed * modifier;
-//   }
-//   if (randomchance < 1) {
-//     monster.y -= monster.speed * modifier; //still got a huge problem with this, monster movement erratic
-//   }
-
-// }
+}; 
 
 // now we have to update the games objects!! this is going to be big!!
 var update = function (modifier) {
@@ -104,18 +95,18 @@ var update = function (modifier) {
 
   // monster movement... make random maybe? how the fuck to make this smooth
 
-  randMove = Math.random() 
+  // randMove = Math.random() 
 
-  if (randMove <= 0.25) {
+  if (monster.direction == "right") {
     monster.x += monster.speed * modifier;
   }
-  if (randMove <= 0.50) {
+  if (monster.direction == "left") {
     monster.x -= monster.speed * modifier;
   }
-  if (randMove <= 0.75) {
+  if (monster.direction == "down") {
      monster.y += monster.speed * modifier;
   }
-  if (randMove <= 1) {
+  if ( monster.direction == "up") {
     monster.y -= monster.speed * modifier; 
   // still got a huge problem with this, monster movement erratic
   }
