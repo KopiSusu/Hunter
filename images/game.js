@@ -1,20 +1,23 @@
 // revolutions per second
-// this is for the cube that is created later!!!!
 var angularSpeed = 0.01; 
 var lastTime = 0;
 
 // Use renderer.domElement to get the DOM element corresponding to the canvas created by the renderer.
+
 var canvas = document.createElement("canvas");
 var ctx = canvas.getContext('2d');
 canvas.width = 512;
 canvas.height = 480;
-
-// lets make the cube!!!!!
+// document.body.appendChild(canvas);
 
 // renderer
 var renderer = new THREE.WebGLRenderer( canvas );
-renderer.setSize(window.innerWidth-10, window.innerHeight-10);
+renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+
+// make a canvas
+// var canvas = document.createElement("canvas");
+
 
 // camera
 var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
@@ -24,12 +27,9 @@ camera.position.z = 500;
 var scene = new THREE.Scene();
 scene.add(camera);
 
-
 // material
 var material = new THREE.MeshLambertMaterial({
-  
-  map: THREE.ImageUtils.loadTexture() // pass canvas in here somehow, must continually update texture
-
+  map: THREE.ImageUtils.loadTexture("images/background.png")
 });
           
 // cube
@@ -47,8 +47,8 @@ var directionalLight = new THREE.DirectionalLight(0xffffff);
 directionalLight.position.set(1, 1, 1).normalize();
 scene.add(directionalLight);
 
-// heres my game logic that draws on the canvas
-
+// need to work out way to pass my game unto this three.js cube.... hmmm
+// heres my game logic...... hmmmm
 // background
 var bgReady = false;
 var bgImage = new Image();
@@ -210,12 +210,6 @@ var render = function () {
   ctx.textAlign = "left";
   ctx.textBaseline = "top";
   ctx.fillText("Monsters caught: " + monstersCaught, 32, 32);
-  material.needsUpdate = true;
-
-  // heres the cool part, we can convert the canvas to a dataImage, and then use that as a texture, since we are using request animation frame this is getting continaully changed, e.g animated!!!! it works!!! perhaps not the best method to do this, still kinda glitchy and slow, but a good start!!!!
-  cube.material = new THREE.MeshLambertMaterial({
-    map: THREE.ImageUtils.loadTexture(canvas.toDataURL("image/png")) 
-  });
 };
 
 // finally, and last, we set up game loop
@@ -232,6 +226,8 @@ var main = function () {
 
   // render
   renderer.render(scene, camera);
+
+
 
   update(delta / 1000);
   render();
@@ -250,10 +246,7 @@ var then = Date.now();
 reset();
 main();
 
-///////////////////////////////
-// stuff still to do!!!! 
-///////////////////////////////
-// okay, so now we have the image on all sides of the cube, the next step is to create individual textures for each side of the canvas, and somehow link them together. maybe a map function? or perhaps if there is a way to draw the canvas over the whole cube, instead of just one side? anyway good start!!!!!!!!!!
+
 
 
 
